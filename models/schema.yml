@@ -50,4 +50,82 @@ sources:
             description: The cost of preparing the parcel in the distribution centre/warehouse
           - name: ship_cost
             description: Shipping cost paid by Greenweez to the carrier/logistics provider
+      
 
+      - name: adwords
+        identifier: raw_gz_adwords
+        description: Google Ads (AdWords) daily performance report at campaign level (raw).
+        columns:
+          - name: date_date
+            description: Report date 
+          - name: paid_source
+            description: Paid marketing source/platform name (e.g., 'adwords')
+          - name: campaign_key
+            description: Unique campaign identifier from the advertising platform.
+          - name: camPGN_name
+            description: Campaign name as provided by the advertising platform (raw field).
+          - name: ads_cost
+            description: Total advertising cost for the date and campaign (raw currency unit).
+          - name: impression
+            description: Number of ad impressions for the date and campaign
+          - name: click
+            description: Number of ad clicks for the date and campaign.
+      
+      - name: bing
+        identifier: raw_gz_bing
+        description: Microsoft Advertising (Bing Ads) daily performance report at campaign level (raw).
+        columns:
+          - name: date_date
+            description: Report date 
+          - name: paid_source
+            description: Paid marketing source/platform name (e.g., 'bing')
+          - name: campaign_key
+            description: Unique campaign identifier from the advertising platform.
+          - name: camPGN_name
+            description: Campaign name as provided by the advertising platform (raw field).
+          - name: ads_cost
+            description: Total advertising cost for the date and campaign (raw currency unit).
+          - name: impression
+            description: Number of ad impressions for the date and campaign
+          - name: click
+            description: Number of ad clicks for the date and campaign.
+
+
+      - name: criteo
+        identifier: raw_gz_criteo
+        description: Criteo daily performance report at campaign level (raw).
+        columns:
+          - name: date_date
+            description: Report date 
+          - name: paid_source
+            description: Paid marketing source/platform name (e.g., 'criteo')
+          - name: campaign_key
+            description: Unique campaign identifier from the advertising platform.
+          - name: camPGN_name
+            description: Campaign name as provided by the advertising platform (raw field).
+          - name: ads_cost
+            description: Total advertising cost for the date and campaign (raw currency unit).
+          - name: impression
+            description: Number of ad impressions for the date and campaign
+          - name: click
+            description: Number of ad clicks for the date and campaign.
+
+
+      - name: facebook
+        identifier: raw_gz_facebook
+        description: Meta (Facebook) Ads daily performance report at campaign level (raw).
+        columns:
+          - name: date_date
+            description: Report date 
+          - name: paid_source
+            description: Paid marketing source/platform name (e.g., 'facebook')
+          - name: campaign_key
+            description: Unique campaign identifier from the advertising platform.
+          - name: camPGN_name
+            description: Campaign name as provided by the advertising platform (raw field).
+          - name: ads_cost
+            description: Total advertising cost for the date and campaign (raw currency unit).
+          - name: impression
+            description: Number of ad impressions for the date and campaign
+          - name: click
+            description: Number of ad clicks for the date and campaign.
