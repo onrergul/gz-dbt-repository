@@ -185,3 +185,17 @@ models:
         description: "Total daily clicks for all advertising platforms."
         tests:
           - not_null
+
+
+  - name: finance_campaigns_day
+    description: "Daily consolidated finance KPIs joined with paid media performance metrics."
+    columns:
+      - name: ads_margin
+        description: "Advertising margin calculated as operational_margin - ads_cost (null-safe if COALESCE is used in the model)."
+        # If you keep FULL OUTER JOIN without COALESCE, remove not_null.
+        tests:
+          - not_null
+      - name: average_basket
+        description: "Daily average basket value (rounded to 2 decimals)."
+        tests:
+          - not_null
