@@ -11,7 +11,7 @@ SELECT
     purchase_cost,
     margin,
     shipping_fee,
-    log_cost,
+    logcost,
     ship_cost
 FROM {{ ref('int_campaigns_day') }}
 FULL OUTER JOIN {{ ref('finance_days') }}

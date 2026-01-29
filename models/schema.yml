@@ -176,12 +176,12 @@ models:
         tests:
           - not_null
 
-      - name: impressions
+      - name: ads_impression
         description: "Total daily impressions for all advertising platforms."
         tests:
           - not_null
 
-      - name: clicks
+      - name: ads_clicks
         description: "Total daily clicks for all advertising platforms."
         tests:
           - not_null
