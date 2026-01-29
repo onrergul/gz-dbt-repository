@@ -7,22 +7,22 @@ sources:
         identifier: raw_gz_product
         description: Products of Greenweez
         columns:
-        - name: products_id
-          description: Primary key
-          tests:
-            - unique
-            - not_null
-        - name: purchase_price
-          description: The purchase price of the product
+          - name: products_id
+            description: Primary key
+            tests:
+              - unique
+              - not_null
+          - name: purchase_price
+            description: The purchase price of the product
 
       - name: sales
         identifier: raw_gz_sales
         description: Sales of Greenweez
+        loaded_at_field: "CAST(date_date AS TIMESTAMP)"
         # freshness testing
-        config: 
-          loaded_at_field: "CAST(date_date AS TIMESTAMP)"
-          freshness: 
-            warn_after: {count: 90, period: day}   
+        config:
+          freshness:
+            warn_after: {count: 90, period: day}  
         columns:
           - name: date_date
             description: Date of purchase
@@ -161,3 +161,27 @@ models:
             - paid_source
             - campaign_key
             - date_date
+
+
+  - name: int_campaigns_day
+    description: "Daily total costs, impressions, clicks"
+    columns:
+      - name: date_date
+        description: "Reporting date"
+        tests:
+          - not_null
+
+      - name: ads_cost
+        description: "Total daily adcosts for all advertising platforms."
+        tests:
+          - not_null
+
+      - name: impressions
+        description: "Total daily impressions for all advertising platforms."
+        tests:
+          - not_null
+
+      - name: clicks
+        description: "Total daily clicks for all advertising platforms."
+        tests:
+          - not_null
