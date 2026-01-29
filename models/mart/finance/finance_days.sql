@@ -14,7 +14,7 @@ FROM {{ ref('int_orders_operational') }}
 GROUP BY date_date
 )
 SELECT
-  date_date
+  date_date,
   nb_transactions,
   revenue,
   ROUND(revenue/NULLIF(nb_transactions, 0), 2) AS average_basket,

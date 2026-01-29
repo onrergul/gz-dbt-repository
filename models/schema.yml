@@ -7,21 +7,22 @@ sources:
         identifier: raw_gz_product
         description: Products of Greenweez
         columns:
-        - name: products_id
-          description: Primary key
-          tests:
-            - unique
-            - not_null
-        - name: purchase_price
-          description: The purchase price of the product
+          - name: products_id
+            description: Primary key
+            tests:
+              - unique
+              - not_null
+          - name: purchase_price
+            description: The purchase price of the product
 
       - name: sales
         identifier: raw_gz_sales
         description: Sales of Greenweez
-        # freshness testing
         loaded_at_field: "CAST(date_date AS TIMESTAMP)"
-        freshness: 
-          warn_after: {count: 90, period: day}     
+        # freshness testing
+        config:
+          freshness:
+            warn_after: {count: 90, period: day}  
         columns:
           - name: date_date
             description: Date of purchase
@@ -50,4 +51,151 @@ sources:
             description: The cost of preparing the parcel in the distribution centre/warehouse
           - name: ship_cost
             description: Shipping cost paid by Greenweez to the carrier/logistics provider
+      
 
+      - name: adwords
+        identifier: raw_gz_adwords
+        description: Google Ads (AdWords) daily performance report at campaign level (raw).
+        columns:
+          - name: date_date
+            description: Report date 
+          - name: paid_source
+            description: Paid marketing source/platform name (e.g., 'adwords')
+          - name: campaign_key
+            description: Unique campaign identifier from the advertising platform.
+          - name: camPGN_name
+            description: Campaign name as provided by the advertising platform (raw field).
+          - name: ads_cost
+            description: Total advertising cost for the date and campaign (raw currency unit).
+          - name: impression
+            description: Number of ad impressions for the date and campaign
+          - name: click
+            description: Number of ad clicks for the date and campaign.
+      
+      - name: bing
+        identifier: raw_gz_bing
+        description: Microsoft Advertising (Bing Ads) daily performance report at campaign level (raw).
+        columns:
+          - name: date_date
+            description: Report date 
+          - name: paid_source
+            description: Paid marketing source/platform name (e.g., 'bing')
+          - name: campaign_key
+            description: Unique campaign identifier from the advertising platform.
+          - name: camPGN_name
+            description: Campaign name as provided by the advertising platform (raw field).
+          - name: ads_cost
+            description: Total advertising cost for the date and campaign (raw currency unit).
+          - name: impression
+            description: Number of ad impressions for the date and campaign
+          - name: click
+            description: Number of ad clicks for the date and campaign.
+
+
+      - name: criteo
+        identifier: raw_gz_criteo
+        description: Criteo daily performance report at campaign level (raw).
+        columns:
+          - name: date_date
+            description: Report date 
+          - name: paid_source
+            description: Paid marketing source/platform name (e.g., 'criteo')
+          - name: campaign_key
+            description: Unique campaign identifier from the advertising platform.
+          - name: camPGN_name
+            description: Campaign name as provided by the advertising platform (raw field).
+          - name: ads_cost
+            description: Total advertising cost for the date and campaign (raw currency unit).
+          - name: impression
+            description: Number of ad impressions for the date and campaign
+          - name: click
+            description: Number of ad clicks for the date and campaign.
+
+
+      - name: facebook
+        identifier: raw_gz_facebook
+        description: Meta (Facebook) Ads daily performance report at campaign level (raw).
+        columns:
+          - name: date_date
+            description: Report date 
+          - name: paid_source
+            description: Paid marketing source/platform name (e.g., 'facebook')
+          - name: campaign_key
+            description: Unique campaign identifier from the advertising platform.
+          - name: camPGN_name
+            description: Campaign name as provided by the advertising platform (raw field).
+          - name: ads_cost
+            description: Total advertising cost for the date and campaign (raw currency unit).
+          - name: impression
+            description: Number of ad impressions for the date and campaign
+          - name: click
+            description: Number of ad clicks for the date and campaign.
+
+models:
+  - name: int_campaigns
+    description: "Daily campaign-level metrics consolidated from all paid advertising platforms."
+    columns:
+      - name: paid_source
+        description: "Paid marketing source/platform (e.g., adwords, bing, criteo, facebook)."
+        tests:
+          - not_null
+
+      - name: campaign_key
+        description: "Unique campaign identifier as provided by the advertising platform."
+        tests:
+          - not_null
+
+      - name: date_date
+        description: "Reporting date (as provided in the raw extract)."
+        tests:
+          - not_null
+
+      - name: campaign_name
+        description: "Campaign name as provided by the advertising platform."
+        tests:
+          - not_null
+
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - paid_source
+            - campaign_key
+            - date_date
+
+
+  - name: int_campaigns_day
+    description: "Daily total costs, impressions, clicks"
+    columns:
+      - name: date_date
+        description: "Reporting date"
+        tests:
+          - not_null
+
+      - name: ads_cost
+        description: "Total daily adcosts for all advertising platforms."
+        tests:
+          - not_null
+
+      - name: ads_impression
+        description: "Total daily impressions for all advertising platforms."
+        tests:
+          - not_null
+
+      - name: ads_clicks
+        description: "Total daily clicks for all advertising platforms."
+        tests:
+          - not_null
+
+
+  - name: finance_campaigns_day
+    description: "Daily consolidated finance KPIs joined with paid media performance metrics."
+    columns:
+      - name: ads_margin
+        description: "Advertising margin calculated as operational_margin - ads_cost (null-safe if COALESCE is used in the model)."
+        # If you keep FULL OUTER JOIN without COALESCE, remove not_null.
+        tests:
+          - not_null
+      - name: average_basket
+        description: "Daily average basket value (rounded to 2 decimals)."
+        tests:
+          - not_null
