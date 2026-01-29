@@ -19,9 +19,10 @@ sources:
         identifier: raw_gz_sales
         description: Sales of Greenweez
         # freshness testing
-        loaded_at_field: "CAST(date_date AS TIMESTAMP)"
-        freshness: 
-          warn_after: {count: 90, period: day}     
+        config: 
+          loaded_at_field: "CAST(date_date AS TIMESTAMP)"
+          freshness: 
+            warn_after: {count: 90, period: day}   
         columns:
           - name: date_date
             description: Date of purchase
@@ -129,3 +130,34 @@ sources:
             description: Number of ad impressions for the date and campaign
           - name: click
             description: Number of ad clicks for the date and campaign.
+
+models:
+  - name: int_campaigns
+    description: "Daily campaign-level metrics consolidated from all paid advertising platforms."
+    columns:
+      - name: paid_source
+        description: "Paid marketing source/platform (e.g., adwords, bing, criteo, facebook)."
+        tests:
+          - not_null
+
+      - name: campaign_key
+        description: "Unique campaign identifier as provided by the advertising platform."
+        tests:
+          - not_null
+
+      - name: date_date
+        description: "Reporting date (as provided in the raw extract)."
+        tests:
+          - not_null
+
+      - name: campaign_name
+        description: "Campaign name as provided by the advertising platform."
+        tests:
+          - not_null
+
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - paid_source
+            - campaign_key
+            - date_date
